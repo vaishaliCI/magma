@@ -735,7 +735,7 @@ jobs:
 
   hello-teravm:
     machine: yes
-    resource_class: your-namespace/your-resource
+    resource_class: magma/teravm
     steps:
       - run: echo "Hi I'm on Runners!"
       - run: echo "test from CIrcleci" > /var/log/circleci
