@@ -733,6 +733,14 @@ jobs:
             make -C ${MAGMA_ROOT}/cwf/k8s/cwf_operator precommit
       - magma_slack_notify
 
+  hello-teravm:
+    machine: yes
+    resource_class: your-namespace/your-resource
+    steps:
+      - run: echo "Hi I'm on Runners!"
+      - run: echo "test from CIrcleci" > /var/log/circleci
+
+
   cwf-operator-build:
     machine:
       image: ubuntu-1604:201903-01
@@ -1054,6 +1062,10 @@ workflows:
             - xwfm-test
           images: 'gateway_python|gateway_pipelined'
           tag: 'hourly'
+
+  hello-teravm:
+    jobs:
+      - hello-teravm
 
   nms:
     jobs:
