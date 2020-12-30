@@ -78,6 +78,9 @@ func TestGxReAuthWithMidSessionPolicyRemoval(t *testing.T) {
 	imsi := ue.GetImsi()
 
 	tr.AuthenticateAndAssertSuccess(imsi)
+	// Wait for flows to be installed
+	assert.Eventually(t, tr.WaitForEnforcementStatsForRule(
+		imsi, "static-pass-all-raa1", "static-pass-all-raa2"), time.Minute, 2*time.Second)
 
 	// Generate over 80% of the quota to trigger a CCR Update
 	req := &cwfprotos.GenTrafficRequest{
