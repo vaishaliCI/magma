@@ -22,7 +22,6 @@ import (
 	fegProtos "magma/feg/cloud/go/protos"
 	lteProtos "magma/lte/cloud/go/protos"
 	"magma/lte/cloud/go/services/policydb/obsidian/models"
-	"strings"
 
 	"math"
 	"math/rand"
@@ -124,19 +123,6 @@ func TestGxUplinkTrafficQosEnforcement(t *testing.T) {
 
 	tr.DisconnectAndAssertSuccess(imsi)
 	tr.AssertEventuallyAllRulesRemovedAfterDisconnect(imsi)
-}
-
-func checkIfRuleInstalled(tr *TestRunner, ruleName string) bool {
-	cmdList := [][]string{
-		{"pipelined_cli.py", "debug", "display_flows"},
-	}
-	cmdOutputList, err := tr.RunCommandInContainer("pipelined", cmdList)
-	if err != nil || len(cmdList) != 1 {
-		fmt.Printf("error dumping pipelined state %v", err)
-		return false
-	}
-
-	return strings.Contains(cmdOutputList[0].output, ruleName)
 }
 
 //TestGxDownlinkTrafficQosEnforcement

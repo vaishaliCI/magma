@@ -120,16 +120,12 @@ func testQosEnforcementRestart(t *testing.T, cfgCh chan string, restartCfg strin
 		protos.NewGxCCAnswer(diam.Success)))
 
 	tr.AuthenticateAndAssertSuccessWithRetries(imsi, 5)
+	assert.Eventually(t, tr.WaitForEnforcementStatsForRule(imsi, ruleKey), time.Minute, 2*time.Second)
+
 	req := &cwfprotos.GenTrafficRequest{
 		Imsi:   imsi,
 		Volume: &wrappers.StringValue{Value: *swag.String("500k")},
 	}
-	// wait for rule to be installed
-	waitForRuleToBeInstalled := func() bool {
-		return checkIfRuleInstalled(tr, ruleKey)
-	}
-	assert.Eventually(t, waitForRuleToBeInstalled, time.Minute, 2*time.Second)
-
 	verifyEgressRate(t, tr, req, float64(uplinkBwMax))
 
 	// Assert that enforcement_stats rules are properly installed and the right
